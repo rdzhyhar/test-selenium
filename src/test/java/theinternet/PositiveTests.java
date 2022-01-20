@@ -52,10 +52,5 @@ public class PositiveTests {
 
     }
 
-    @Test
-    public void test(){
-        System.out.println("teeetteteetteetetete ");
-    }
-
 
 }
