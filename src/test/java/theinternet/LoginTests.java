@@ -5,8 +5,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
+
+import java.time.Duration;
 
 public class LoginTests {
 
@@ -16,7 +20,7 @@ public class LoginTests {
     @BeforeMethod(alwaysRun = true)
     private void setUp(@Optional("chrome") String browser) {
         //Create driver
-        switch (browser){
+        switch (browser) {
             case "chrome":
                 System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
                 driver = new ChromeDriver();
@@ -33,6 +37,8 @@ public class LoginTests {
         }
         //maximize driver window
         driver.manage().window().maximize();
+        //implicitWait
+        //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     }
 
 
@@ -49,8 +55,12 @@ public class LoginTests {
         //enter password
         WebElement password = driver.findElement(By.name("password"));
         password.sendKeys("SuperSecretPassword!");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
         //click login button
         WebElement logInButton = driver.findElement(By.tagName("button"));
+        wait.until(ExpectedConditions.elementToBeClickable(logInButton));
         logInButton.click();
         //verifications:
         //new url
