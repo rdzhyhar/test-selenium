@@ -9,7 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class NegativeTests {
-    @Test
+    @Test(priority = 1)
     public void negativeUsernameTest() {
         System.out.println("Starting negativeUsernameTest");
         //Create driver
@@ -45,7 +45,7 @@ public class NegativeTests {
 
     }
 
-    @Test
+    @Test(priority = 2)
     public void negativePasswordTest() {
         System.out.println("Starting negativePasswordTest");
         //Create driver
