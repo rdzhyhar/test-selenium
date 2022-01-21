@@ -4,21 +4,29 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 public class LoginTests {
 
-    @Test(priority = 1, groups = {"positiveTests","smokeTests"})
-    public void positiveLoginTest() {
-        System.out.println("Starting loginTest");
+    private WebDriver driver;
+
+    @BeforeMethod(alwaysRun = true)
+    private void setUp() {
         //Create driver
         System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
+        driver = new ChromeDriver();
         //maximize driver window
         driver.manage().window().maximize();
+    }
+
+
+    @Test(priority = 1, groups = {"positiveTests", "smokeTests"})
+    public void positiveLoginTest() {
+        System.out.println("Starting loginTest");
         //open test page
         String url = "https://the-internet.herokuapp.com/login";
         driver.get(url);
@@ -54,15 +62,10 @@ public class LoginTests {
 
     }
 
-    @Parameters({"username","password","expectedMessage"})
-    @Test(priority = 2, groups = {"negativeTests","smokeTests"})
+    @Parameters({"username", "password", "expectedMessage"})
+    @Test(priority = 2, groups = {"negativeTests", "smokeTests"})
     public void negativeLoginTest(String username, String password, String expectedMessage) {
         System.out.println("Starting negativeLoginTest with " + username + " and " + password);
-        //Create driver
-        System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver.exe");
-        WebDriver driver = new FirefoxDriver();
-        //maximize driver window
-        driver.manage().window().maximize();
         //open test page
         String url = "https://the-internet.herokuapp.com/login";
         driver.get(url);
@@ -85,9 +88,11 @@ public class LoginTests {
                         "Actual message does not contains expected message." +
                                 "\nActual message: " + actualErrorMessage +
                                 "\nExpected message: " + expectedMessage);
-        //Close browser
-        driver.quit();
+    }
 
+    @AfterMethod(alwaysRun = true)
+    private void tearDown() {
+        driver.quit();
     }
 
 
