@@ -51,7 +51,21 @@ public class ExceptionsTests {
         wait.until(ExpectedConditions.visibilityOf(finishText));
         String actualFinishText = finishText.getText();
         String expectedFinishText = "Hello World!";
-        Assert.assertEquals(actualFinishText,expectedFinishText,""+actualFinishText+" "+expectedFinishText);
+        Assert.assertEquals(actualFinishText, expectedFinishText, "" + actualFinishText + " " + expectedFinishText);
+
+    }
+
+    @Test
+    public void timeoutTest() {
+        driver.get("https://the-internet.herokuapp.com/dynamic_loading/1");
+        WebElement startButton = driver.findElement(By.xpath("//button[text()='Start']"));
+        startButton.click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        WebElement finishText = driver.findElement(By.id("finish"));
+        wait.until(ExpectedConditions.visibilityOf(finishText));
+        String actualFinishText = finishText.getText();
+        String expectedFinishText = "Hello World!";
+        Assert.assertEquals(actualFinishText, expectedFinishText, "" + actualFinishText + " " + expectedFinishText);
 
     }
 
