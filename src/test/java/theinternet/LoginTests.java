@@ -4,13 +4,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-public class PositiveTests {
+public class LoginTests {
 
-    @Test
-    public void loginTest() {
+    @Test(priority = 1, groups = {"positiveTests","smokeTests"})
+    public void positiveLoginTest() {
         System.out.println("Starting loginTest");
         //Create driver
         System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
@@ -47,6 +49,42 @@ public class PositiveTests {
                         "Actual message does not contains expected message." +
                                 "\nActual message: " + actualSuccessMessage +
                                 "\nExpected message: " + expectedSuccessMessage);
+        //Close browser
+        driver.quit();
+
+    }
+
+    @Parameters({"username","password","expectedMessage"})
+    @Test(priority = 2, groups = {"negativeTests","smokeTests"})
+    public void negativeLoginTest(String username, String password, String expectedMessage) {
+        System.out.println("Starting negativeLoginTest with " + username + " and " + password);
+        //Create driver
+        System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        //maximize driver window
+        driver.manage().window().maximize();
+        //open test page
+        String url = "https://the-internet.herokuapp.com/login";
+        driver.get(url);
+        System.out.println("Page is opened");
+        //enter username
+        WebElement usernameElement = driver.findElement(By.id("username"));
+        usernameElement.sendKeys(username);
+        //enter password
+        WebElement passwordElement = driver.findElement(By.name("password"));
+        passwordElement.sendKeys(password);
+        //click login button
+        WebElement logInButton = driver.findElement(By.tagName("button"));
+        logInButton.click();
+        //verifications:
+        //successful login message
+        WebElement errorMessageElement = driver.findElement(By.id("flash"));
+        String actualErrorMessage = errorMessageElement.getText();
+        Assert.assertTrue
+                (actualErrorMessage.contains(expectedMessage),
+                        "Actual message does not contains expected message." +
+                                "\nActual message: " + actualErrorMessage +
+                                "\nExpected message: " + expectedMessage);
         //Close browser
         driver.quit();
 
