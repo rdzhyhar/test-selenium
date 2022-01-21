@@ -6,12 +6,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 public class NegativeTests {
-    @Test(priority = 1,groups = {"negativeTests"})
-    public void negativeUsernameTest() {
-        System.out.println("Starting negativeUsernameTest");
+    @Parameters({"username","password","expectedMessage"})
+    @Test(priority = 1, groups = {"negativeTests"})
+    public void negativeLoginTest(String username, String password, String expectedMessage) {
+        System.out.println("Starting negativeLoginTest with " + username + " and " + password);
         //Create driver
         System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver.exe");
         WebDriver driver = new FirefoxDriver();
@@ -22,30 +24,29 @@ public class NegativeTests {
         driver.get(url);
         System.out.println("Page is opened");
         //enter username
-        WebElement username = driver.findElement(By.id("username"));
-        username.sendKeys("incorrectUsername");
+        WebElement usernameElement = driver.findElement(By.id("username"));
+        usernameElement.sendKeys(username);
         //enter password
-        WebElement password = driver.findElement(By.name("password"));
-        password.sendKeys("SuperSecretPassword!");
+        WebElement passwordElement = driver.findElement(By.name("password"));
+        passwordElement.sendKeys(password);
         //click login button
         WebElement logInButton = driver.findElement(By.tagName("button"));
         logInButton.click();
         //verifications:
         //successful login message
-        WebElement errorMessage = driver.findElement(By.id("flash"));
-        String expectedErrorMessage = "Your username is invalid!";
-        String actualErrorMessage = errorMessage.getText();
+        WebElement errorMessageElement = driver.findElement(By.id("flash"));
+        String actualErrorMessage = errorMessageElement.getText();
         Assert.assertTrue
-                (actualErrorMessage.contains(expectedErrorMessage),
+                (actualErrorMessage.contains(expectedMessage),
                         "Actual message does not contains expected message." +
                                 "\nActual message: " + actualErrorMessage +
-                                "\nExpected message: " + expectedErrorMessage);
+                                "\nExpected message: " + expectedMessage);
         //Close browser
         driver.quit();
 
     }
 
-    @Test(priority = 2,groups = {"negativeTests"})
+    /*@Test(priority = 2,groups = {"negativeTests"})
     public void negativePasswordTest() {
         System.out.println("Starting negativePasswordTest");
         //Create driver
@@ -79,6 +80,6 @@ public class NegativeTests {
         //Close browser
         driver.quit();
 
-    }
+    }*/
 
 }
