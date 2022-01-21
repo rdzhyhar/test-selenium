@@ -31,9 +31,6 @@ public class LoginTests {
                 driver = new ChromeDriver();
                 break;
         }
-
-        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
-        driver = new ChromeDriver();
         //maximize driver window
         driver.manage().window().maximize();
     }
