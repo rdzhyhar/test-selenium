@@ -6,7 +6,7 @@
         <classes>
             <class name="theinternet.ExceptionsTests">
                 <methods>
-                    <include name="staleElementTest"/>
+                    <include name="disabledElementTest"/>
                 </methods>
             </class>
         </classes>

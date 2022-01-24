@@ -114,7 +114,28 @@ public class ExceptionsTests {
         WebElement addButton = driver.findElement(By.xpath("//button[contains(text(),'Add')]"));
         addButton.click();
         checkbox = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("checkbox")));
-        Assert.assertTrue(checkbox.isDisplayed(),"Checkbox is not visible, but it should be");
+        Assert.assertTrue(checkbox.isDisplayed(), "Checkbox is not visible, but it should be");
+    }
+
+    @Test
+    public void disabledElementTest() {
+        driver.get("https://the-internet.herokuapp.com/dynamic_controls");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement textField = driver.findElement(By.xpath("//input[@type='text']"));
+        WebElement enableButton = driver.findElement(By.xpath("//button[text()='Enable']"));
+        //WebElement disableButton = driver.findElement(By.xpath("//button[text()='Disable']"));
+
+        enableButton.click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(textField));
+
+        textField.sendKeys("Some text");
+
+        String actualText = textField.getAttribute("value");
+        String expectedText = "Some text";
+        Assert.assertEquals(actualText,expectedText);
+
+
     }
 
     @AfterMethod(alwaysRun = true)
