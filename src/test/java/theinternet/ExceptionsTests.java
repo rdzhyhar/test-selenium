@@ -1,6 +1,7 @@
 package theinternet;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -41,7 +42,7 @@ public class ExceptionsTests {
         //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     }
 
-    @Test
+    @Test(priority = 1)
     public void notVisibleTest() {
         driver.get("https://the-internet.herokuapp.com/dynamic_loading/1");
         WebElement startButton = driver.findElement(By.xpath("//button[text()='Start']"));
@@ -55,18 +56,40 @@ public class ExceptionsTests {
 
     }
 
-    @Test
+    @Test(priority = 2)
     public void timeoutTest() {
         driver.get("https://the-internet.herokuapp.com/dynamic_loading/1");
         WebElement startButton = driver.findElement(By.xpath("//button[text()='Start']"));
         startButton.click();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
         WebElement finishText = driver.findElement(By.id("finish"));
-        wait.until(ExpectedConditions.visibilityOf(finishText));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(finishText));
+        } catch (TimeoutException exception) {
+            System.out.println("Exception caught" + exception.getMessage());
+            sleep(3000);
+        }
         String actualFinishText = finishText.getText();
         String expectedFinishText = "Hello World!";
         Assert.assertEquals(actualFinishText, expectedFinishText, "" + actualFinishText + " " + expectedFinishText);
 
+    }
+
+    @Test(priority = 3)
+    public void noSuchElementTest() {
+        driver.get("https://the-internet.herokuapp.com/dynamic_loading/2");
+        WebElement startButton = driver.findElement(By.xpath("//button[text()='Start']"));
+        startButton.click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        Assert.assertTrue(
+                wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("finish"), "Hello World!")),
+                "Could not verify expected text 'Hello World!' ");
+
+        /*WebElement finishText = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("finish")));
+        String actualFinishText = finishText.getText();
+        String expectedFinishText = "Hello World!";
+        Assert.assertEquals(actualFinishText, expectedFinishText, "" + actualFinishText + " " + expectedFinishText);
+        */
     }
 
     @AfterMethod(alwaysRun = true)
@@ -74,5 +97,12 @@ public class ExceptionsTests {
         driver.quit();
     }
 
+    private void sleep(long m) {
+        try {
+            Thread.sleep(m);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
