@@ -92,6 +92,31 @@ public class ExceptionsTests {
         */
     }
 
+    @Test
+    public void staleElementTest() {
+        driver.get("https://the-internet.herokuapp.com/dynamic_controls");
+        WebElement checkbox = driver.findElement(By.id("checkbox"));
+        WebElement removeButton = driver.findElement(By.xpath("//button[contains(text(),'Remove')]"));
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        removeButton.click();
+
+        /*wait.until(ExpectedConditions.invisibilityOf(checkbox));
+        Assert.assertFalse(checkbox.isDisplayed());*/
+
+        /*Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(checkbox)),
+                "Checkbox is still visible, but shouldn't`t be");*/
+
+        Assert.assertTrue(wait.until(ExpectedConditions.stalenessOf(checkbox)),
+                "Checkbox is still visible, but shouldn't`t be");
+
+        WebElement addButton = driver.findElement(By.xpath("//button[contains(text(),'Add')]"));
+        addButton.click();
+        checkbox = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("checkbox")));
+        Assert.assertTrue(checkbox.isDisplayed(),"Checkbox is not visible, but it should be");
+    }
+
     @AfterMethod(alwaysRun = true)
     private void tearDown() {
         driver.quit();
