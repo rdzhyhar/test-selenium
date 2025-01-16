@@ -40,7 +40,6 @@ public class LoginTests {
         //implicitWait
     }
         //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-    //qwe2
 
 
     @Test(priority = 1, groups = {"positiveTests", "smokeTests"})
