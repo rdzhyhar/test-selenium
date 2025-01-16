@@ -38,8 +38,9 @@ public class LoginTests {
         //maximize driver window
         driver.manage().window().maximize();
         //implicitWait
-        //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        //qwe
     }
+        //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
 
     @Test(priority = 1, groups = {"positiveTests", "smokeTests"})
