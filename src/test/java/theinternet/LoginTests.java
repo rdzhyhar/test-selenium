@@ -38,6 +38,7 @@ public class LoginTests {
         //maximize driver window
         driver.manage().window().maximize();
         //implicitWait
+        //a1
     }
         //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
